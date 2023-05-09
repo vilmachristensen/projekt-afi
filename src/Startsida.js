@@ -1,20 +1,37 @@
 import { useEffect, useState } from "react";
+import { json } from "react-router";
 
 function Startsida() {
     //var data = [];
+    const apiKey = 'f13d8a8cff3772ba30a6f2607f6239c55282c3cd102e7a241477be2f';
     const [data, setData] = useState([]);
     const showData = async () => {
         try {
-            const response = fetch('https://opendata.umea.se/api/records/1.0/search/?dataset=vandringsleder&q=&facet=namn&facet=delstracka&facet=klass&facet=langd', { 
-                mode: 'no-cors',
+            const response = await fetch('https://opendata.umea.se/api/v2/catalog/datasets/vandringsleder/records?limit=10&offset=0&timezone=UTC', { 
+                //mode: 'cors',
                 headers: {
+                    'Authorization': 'Apikey ' + apiKey,
                     'Content-Type': 'application/json',
                 },
             });
-            console.log('Hej');
-            console.log(await response);
-            setData(response);
-            //console.log(data);
+
+
+            /*
+            if(!jsonData.ok){
+                throw new Error(`Error! status: ${jsonData.status}`);
+            }
+            */
+            console.log('Response:');
+            console.log(response);
+
+            const result = await response.json();
+
+            console.log('Json:');
+            console.log(result);
+
+            setData(result);
+
+
         }
         catch (error) {
             console.error(error);
@@ -24,8 +41,12 @@ function Startsida() {
     useEffect(() => {
         showData();
     }, []);
-        
+    
+    console.log('Data:');
+    console.log(data)
+
     return(
+        
         <table className='table table-striped'>
                <thead>
                    <tr>
@@ -50,6 +71,8 @@ function Startsida() {
                    )}
                </tbody>
            </table>  
+           
+           
     );
 }
 
