@@ -47,6 +47,7 @@ function Startsida() {
 
     return(
         
+        /*
         <table className='table table-striped'>
                <thead>
                    <tr>
@@ -59,7 +60,7 @@ function Startsida() {
                    </tr>
                </thead>
                <tbody>
-                   {data.map(info =>
+                   {data.records.map(info =>
                        <tr key={info.recordid}>
                            <td>{info.namn}</td>
                            <td>{info.delstracka}</td>
@@ -71,7 +72,8 @@ function Startsida() {
                    )}
                </tbody>
            </table>  
-           
+           */
+          <p>Startsida</p>
            
     );
 }
