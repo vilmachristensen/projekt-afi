@@ -7,7 +7,9 @@ function Startsida() {
     const [data, setData] = useState([]);
     const showData = async () => {
         try {
+
             //https://opendata.umea.se/api/v2/catalog/datasets/vandringsleder/records?limit=10&offset=0&timezone=UTC
+
             const response = await fetch('https://opendata.umea.se/api/v2/catalog/datasets/vandringsleder/records', { 
                 //mode: 'cors',
                 headers: {
