@@ -1,31 +1,19 @@
-import { useEffect, useState } from "react";
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { json } from "react-router";
 
 function Startsida() {
-    //var data = [];
     const apiKey = 'f13d8a8cff3772ba30a6f2607f6239c55282c3cd102e7a241477be2f';
     const [data, setData] = useState([]);
 
     const showData = async () => {
         try {
-
-            //https://opendata.umea.se/api/v2/catalog/datasets/vandringsleder/records?limit=10&offset=0&timezone=UTC
-
             const response = await fetch('https://opendata.umea.se/api/v2/catalog/datasets/vandringsleder/records', { 
-                //mode: 'cors',
                 headers: {
                     'Authorization': 'Apikey ' + apiKey,
                     'Content-Type': 'application/json',
                 },
             });
 
-
-            /*
-            if(!jsonData.ok){
-                throw new Error(`Error! status: ${jsonData.status}`);
-            }
-            */
             console.log('Response:');
             console.log(response);
 
@@ -41,7 +29,7 @@ function Startsida() {
         catch (error) {
             console.error(error);
         }
-    };
+    }; 
 
     useEffect(() => {
         showData();
@@ -59,38 +47,72 @@ function Startsida() {
 
     return(
         
-        <table className='table table-striped'>
-               <thead>
-                   <tr>
-                       <th>Namn</th>
-                       <th>Delsträcka</th>
-                       <th>Kommun</th>
-                       <th>Klass</th>
-                       <th>Längd</th>
-                       <th>Datum</th>
-                       <th>Lon</th>
-                       <th>Lat</th>
-                   </tr>
-               </thead>
-               <tbody>
-                <>
-                   {data.records.map((record) =>
-                       <tr key={record.record.id}>
-                           <td>{record.record.fields.namn}</td>
-                           <td>{record.record.fields.delstracka}</td>
-                           <td>{record.record.fields.kommun}</td>
-                           <td>{record.record.fields.klass}</td>
-                           <td>{record.record.fields.langd}</td>
-                           <td>{record.record.fields.datum}</td>
-                           <td>{record.record.fields.geo_point_2d.lon}</td>
-                           <td>{record.record.fields.geo_point_2d.lat}</td>
-                       </tr>
-                   )}
-                </>
-               </tbody>
-           </table>  
+            <table className='table table-striped'>
+                <thead>
+                    <tr>
+                        <th>Namn</th>
+                        <th>Delsträcka</th>
+                        <th>Kommun</th>
+                        <th>Klass</th>
+                        <th>Längd</th>
+                        <th>Datum</th>
+                        <th>Lon</th>
+                        <th>Lat</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {data.records ?
+                    <>
+                    {data.records.map((record) =>
+                        <tr key={record.record.id}>
+                            <td>{record.record.fields.namn}</td>
+                            <td>{record.record.fields.delstracka}</td>
+                            <td>{record.record.fields.kommun}</td>
+                            <td>{record.record.fields.klass}</td>
+                            <td>{record.record.fields.langd}</td>
+                            <td>{record.record.fields.datum}</td>
+                            <td>{record.record.fields.geo_point_2d.lon}</td>
+                            <td>{record.record.fields.geo_point_2d.lat}</td>
+                        </tr>
+                    )}
+                    </> 
+                    :
+                    <tr>
+                        <td>{'-'}</td>
+                        <td>{'-'}</td>
+                        <td>{'-'}</td>
+                        <td>{'-'}</td>
+                        <td>{'-'}</td>
+                        <td>{'-'}</td>
+                        <td>{'-'}</td>
+                        <td>{'-'}</td>
+                    </tr>
+
+                }
+                
+                
+                </tbody>
+            </table> 
+
+
            
         //KOLLA UPP: Varför funkade det inte att använda <div>-taggar istället för <>?
+
+
+/*
+{data.length > 0 &&
+
+    <tr>
+                        <td>{'Laddar'}</td>
+                        <td>{'Laddar'}</td>
+                        <td>{Laddar}</td>
+                        <td>{Laddar}</td>
+                        <td>{Laddar}</td>
+                        <td>{Laddar}</td>
+                        <td>{Laddar}</td>
+                        <td>{Laddar}</td>
+                    </tr>
+*/
 
 
            /*
