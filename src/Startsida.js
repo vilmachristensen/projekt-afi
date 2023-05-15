@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import React from 'react';
 import { json } from "react-router";
 
 function Startsida() {
     //var data = [];
     const apiKey = 'f13d8a8cff3772ba30a6f2607f6239c55282c3cd102e7a241477be2f';
     const [data, setData] = useState([]);
+
     const showData = async () => {
         try {
 
@@ -48,9 +50,15 @@ function Startsida() {
     console.log('Data:');
     console.log(data)
 
+    /*
+    console.log('Data.record:');
+    for(var i = 0; i <= data.length; i++){
+        console.log(data.records[i]);
+    }
+    */
+
     return(
         
-        /*
         <table className='table table-striped'>
                <thead>
                    <tr>
@@ -60,24 +68,47 @@ function Startsida() {
                        <th>Klass</th>
                        <th>Längd</th>
                        <th>Datum</th>
+                       <th>Lon</th>
+                       <th>Lat</th>
                    </tr>
                </thead>
                <tbody>
-                   {data.records.map(info =>
-                       <tr key={info.recordid}>
-                           <td>{info.namn}</td>
-                           <td>{info.delstracka}</td>
-                           <td>{info.kommun}</td>
-                           <td>{info.klass}</td>
-                           <td>{info.langd}</td>
-                           <td>{info.datum}</td>
+                <>
+                   {data.records.map((record) =>
+                       <tr key={record.record.id}>
+                           <td>{record.record.fields.namn}</td>
+                           <td>{record.record.fields.delstracka}</td>
+                           <td>{record.record.fields.kommun}</td>
+                           <td>{record.record.fields.klass}</td>
+                           <td>{record.record.fields.langd}</td>
+                           <td>{record.record.fields.datum}</td>
+                           <td>{record.record.fields.geo_point_2d.lon}</td>
+                           <td>{record.record.fields.geo_point_2d.lat}</td>
                        </tr>
                    )}
+                </>
                </tbody>
            </table>  
-           */
-          <p>Startsida</p>
            
+        //KOLLA UPP: Varför funkade det inte att använda <div>-taggar istället för <>?
+
+
+           /*
+        <div>
+        <>
+        <ul>
+            {data.records.map((record) => (
+                <React.Fragment key={record.record.id}>
+                <li>{record.record.fields.namn}</li>
+                <li>{record.record.fields.delstracka}</li>
+                <li>{record.record.fields.kommun}</li>
+                </React.Fragment>
+            ))}
+        </ul>
+        </>
+        </div>
+        */
+
     );
 }
 
