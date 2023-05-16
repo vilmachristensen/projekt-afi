@@ -1,19 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import { json } from "react-router";
+import React, { useRef, useEffect, useState } from 'react';
+import mapboxgl from 'mapbox-gl';
 
 function Startsida() {
+
+    // Hör till mapbox
+    mapboxgl.accessToken = 'pk.eyJ1IjoidmlsbWFjaHJpc3RlbnNlbiIsImEiOiJjbGhvbzY5dWoxcml1M2ZveHJ1Y21vMTNwIn0.9VwbYqVIM4EBW9ecpy4VHg';
+    const mapContainer = useRef(null);
+    const map = useRef(null);
+    const [lng, setLng] = useState(-70.9);
+    const [lat, setLat] = useState(42.35);
+    const [zoom, setZoom] = useState(9);
+
+    // Hör till open data umeå
     const apiKey = 'f13d8a8cff3772ba30a6f2607f6239c55282c3cd102e7a241477be2f';
     const [data, setData] = useState([]);
 
+    // Fetch till open data umeå
     const showData = async () => {
         try {
-            const response = await fetch('https://opendata.umea.se/api/v2/catalog/datasets/vandringsleder/records', { 
+            const response = await fetch('https://opendata.umea.se/api/v2/catalog/datasets/vandringsleder/records?limit=80', { 
                 headers: {
                     'Authorization': 'Apikey ' + apiKey,
                     'Content-Type': 'application/json',
                 },
             });
-
+ 
             console.log('Response:');
             console.log(response);
 
@@ -34,19 +45,24 @@ function Startsida() {
     useEffect(() => {
         showData();
     }, []);
+
+    useEffect(() => {
+        if (map.current)
+            return;
+        
+        map.current = new mapboxgl.Map({
+            container: mapContainer.current,
+            style: 'mapbox://styles/mapbox/streets-v12',
+            center: [lng, lat],
+            zoom: zoom
+        });
+    });
     
     console.log('Data:');
     console.log(data)
 
-    /*
-    console.log('Data.record:');
-    for(var i = 0; i <= data.length; i++){
-        console.log(data.records[i]);
-    }
-    */
-
     return(
-        
+        <div>
             <table className='table table-striped'>
                 <thead>
                     <tr>
@@ -62,7 +78,7 @@ function Startsida() {
                 </thead>
                 <tbody>
                 {data.records ?
-                    <>
+                    <> {/* JSX kan också använda div */}
                     {data.records.map((record) =>
                         <tr key={record.record.id}>
                             <td>{record.record.fields.namn}</td>
@@ -73,7 +89,7 @@ function Startsida() {
                             <td>{record.record.fields.datum}</td>
                             <td>{record.record.fields.geo_point_2d.lon}</td>
                             <td>{record.record.fields.geo_point_2d.lat}</td>
-                        </tr>
+                        </tr> 
                     )}
                     </> 
                     :
@@ -89,48 +105,12 @@ function Startsida() {
                     </tr>
 
                 }
-                
-                
                 </tbody>
             </table> 
-
-
-           
-        //KOLLA UPP: Varför funkade det inte att använda <div>-taggar istället för <>?
-
-
-/*
-{data.length > 0 &&
-
-    <tr>
-                        <td>{'Laddar'}</td>
-                        <td>{'Laddar'}</td>
-                        <td>{Laddar}</td>
-                        <td>{Laddar}</td>
-                        <td>{Laddar}</td>
-                        <td>{Laddar}</td>
-                        <td>{Laddar}</td>
-                        <td>{Laddar}</td>
-                    </tr>
-*/
-
-
-           /*
-        <div>
-        <>
-        <ul>
-            {data.records.map((record) => (
-                <React.Fragment key={record.record.id}>
-                <li>{record.record.fields.namn}</li>
-                <li>{record.record.fields.delstracka}</li>
-                <li>{record.record.fields.kommun}</li>
-                </React.Fragment>
-            ))}
-        </ul>
-        </>
+            <div>
+                <div ref={mapContainer} className="map-container" />
+            </div>
         </div>
-        */
-
     );
 }
 
