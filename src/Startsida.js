@@ -4,11 +4,11 @@ import mapboxgl from 'mapbox-gl';
 function Startsida() {
 
     // Hör till mapbox
-    mapboxgl.accessToken = 'pk.eyJ1IjoidmlsbWFjaHJpc3RlbnNlbiIsImEiOiJjbGhvbzY5dWoxcml1M2ZveHJ1Y21vMTNwIn0.9VwbYqVIM4EBW9ecpy4VHg';
+    mapboxgl.accessToken = 'pk.eyJ1IjoibGlubmVhbmlsc3NvbjAwIiwiYSI6ImNsaDh1NGlsazAxM3Mza3FmY3c4eG15ZDUifQ.5_Re7kERjjj5yg7rjtEBqQ';
     const mapContainer = useRef(null);
     const map = useRef(null);
-    const [lng, setLng] = useState(-70.9);
-    const [lat, setLat] = useState(42.35);
+    const [lng, setLng] = useState(20.26);
+    const [lat, setLat] = useState(63.83);
     const [zoom, setZoom] = useState(9);
 
     // Hör till open data umeå
@@ -42,10 +42,20 @@ function Startsida() {
         }
     }; 
 
+    //Funktion som sätter koordinaterna till dem inskickade
+    const setCoordinates = (chosenLng, chosenLat) => {
+        setLat(chosenLat)
+        setLng(chosenLng)
+        setZoom(13)
+    }
+
+    //useEffect som visar resultat från fetch från Open API Umeå
     useEffect(() => {
         showData();
     }, []);
 
+
+    //useEffect som initialiserar kartan med default koordinater
     useEffect(() => {
         if (map.current)
             return;
@@ -57,9 +67,29 @@ function Startsida() {
             zoom: zoom
         });
     });
+
+    //useEffect som updaterar kartan med dem nya koordinaterna
+    useEffect(() => {
+        if(!map.current || !lng || !lat)
+            return;
+
+            const updateMap = () => {
+                map.current.flyTo({center: [lng, lat], zoom});
+            }
+
+            updateMap();
+
+    }, [lng, lat, zoom])
     
+   
     console.log('Data:');
     console.log(data)
+
+
+    console.log('lat:')
+    console.log(lat)
+    console.log('lng:')
+    console.log(lng)
 
     return(
         <div>
@@ -108,6 +138,13 @@ function Startsida() {
                 </tbody>
             </table> 
             <div>
+                <button onClick={() => setCoordinates(-0.118092, 51.509865)} type="button">Click me</button>
+            </div>
+
+            <div>
+                <div className="sidebar">
+                    Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
+                </div>
                 <div ref={mapContainer} className="map-container" />
             </div>
         </div>
@@ -115,3 +152,5 @@ function Startsida() {
 }
 
 export default Startsida;
+
+//onClick={setCoordinates(-8.35, 115.38)} 
