@@ -46,7 +46,7 @@ function Startsida() {
     const setCoordinates = (chosenLng, chosenLat) => {
         setLat(chosenLat)
         setLng(chosenLng)
-        setZoom(13)
+        setZoom(15)
     }
 
     //useEffect som visar resultat från fetch från Open API Umeå
@@ -75,8 +75,11 @@ function Startsida() {
 
             const updateMap = () => {
                 map.current.flyTo({center: [lng, lat], zoom});
+                const marker = new mapboxgl.Marker({ color: 'black'})
+                .setLngLat([lng, lat])
+                .addTo(map.current);
             }
-
+            
             updateMap();
 
     }, [lng, lat, zoom])
@@ -104,6 +107,7 @@ function Startsida() {
                         <th>Datum</th>
                         <th>Lon</th>
                         <th>Lat</th>
+                        <th>Välj</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -119,6 +123,7 @@ function Startsida() {
                             <td>{record.record.fields.datum}</td>
                             <td>{record.record.fields.geo_point_2d.lon}</td>
                             <td>{record.record.fields.geo_point_2d.lat}</td>
+                            <td><a href ="#" onClick={() => setCoordinates(record.record.fields.geo_point_2d.lon, record.record.fields.geo_point_2d.lat)}>Välj</a></td>
                         </tr> 
                     )}
                     </> 
@@ -133,7 +138,6 @@ function Startsida() {
                         <td>{'-'}</td>
                         <td>{'-'}</td>
                     </tr>
-
                 }
                 </tbody>
             </table> 
@@ -142,9 +146,6 @@ function Startsida() {
             </div>
 
             <div>
-                <div className="sidebar">
-                    Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
-                </div>
                 <div ref={mapContainer} className="map-container" />
             </div>
         </div>
@@ -152,5 +153,3 @@ function Startsida() {
 }
 
 export default Startsida;
-
-//onClick={setCoordinates(-8.35, 115.38)} 
