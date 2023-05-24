@@ -47,6 +47,11 @@ function Startsida() {
         setLat(chosenLat)
         setLng(chosenLng)
         setZoom(15)
+
+
+        console.log('koordinaten är satt')
+        console.log(lng)
+        console.log(lat)
     }
 
     //useEffect som visar resultat från fetch från Open API Umeå
@@ -72,12 +77,13 @@ function Startsida() {
     useEffect(() => {
         if(!map.current || !lng || !lat)
             return;
-
+            
             const updateMap = () => {
                 map.current.flyTo({center: [lng, lat], zoom});
-                const marker = new mapboxgl.Marker({ color: 'black'})
+                const marker = new mapboxgl.Marker({ color: 'green'})
                 .setLngLat([lng, lat])
                 .addTo(map.current);
+                console.log("Marker är satt");
             }
             
             updateMap();
@@ -123,12 +129,25 @@ function Startsida() {
                             <td>{record.record.fields.datum}</td>
                             <td>{record.record.fields.geo_point_2d.lon}</td>
                             <td>{record.record.fields.geo_point_2d.lat}</td>
-                            <td><a href ="#" onClick={() => setCoordinates(record.record.fields.geo_point_2d.lon, record.record.fields.geo_point_2d.lat)}>Välj</a></td>
-                        </tr> 
+                            <td>
+                                <a href = "#"
+                                onClick={() => {
+                                    record.record.fields.geo_shape.geometry.coordinates.map(
+                                        (coordinate, i) => {
+                                            setTimeout(() => {
+                                                setCoordinates(coordinate[0], coordinate[1]);
+                                            }, 3000);
+                                        }
+                                );
+                                }}
+                                >Välj</a>
+                            </td>        
+                        </tr>
                     )}
                     </> 
                     :
                     <tr>
+                        <td>{'-'}</td>
                         <td>{'-'}</td>
                         <td>{'-'}</td>
                         <td>{'-'}</td>
@@ -142,10 +161,6 @@ function Startsida() {
                 </tbody>
             </table> 
             <div>
-                <button onClick={() => setCoordinates(-0.118092, 51.509865)} type="button">Click me</button>
-            </div>
-
-            <div>
                 <div ref={mapContainer} className="map-container" />
             </div>
         </div>
@@ -153,3 +168,15 @@ function Startsida() {
 }
 
 export default Startsida;
+
+
+//  <td><a href ="#" onClick={() => setCoordinates(record.record.fields.geo_point_2d.lon, record.record.fields.geo_point_2d.lat)}>Välj</a></td>
+
+
+// {data.records.record.fields.geo_shape.coordinates.map((coordinate) =>
+// <td><a href ="#" onClick={() => setCoordinates(coordinate[i], coordinate[i+1])}>Välj</a></td>
+//)}
+
+// {record.record.fields.geo_shape.geometry.coordinates.map((coordinate, i) => 
+//<td key={i}><a href ="#" onClick={() => setCoordinates(coordinate[0], coordinate[1])}>Välj</a></td>
+//)} 
