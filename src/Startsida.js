@@ -9,7 +9,9 @@ function Startsida() {
     const map = useRef(null);
     const [lng, setLng] = useState(20.26);
     const [lat, setLat] = useState(63.83);
-    const [zoom, setZoom] = useState(9);
+    const [zoom, setZoom] = useState(15);
+
+    const [coordinatesArray, setCoordinatesArray] = useState([]);
 
     // Hör till open data umeå
     const apiKey = 'f13d8a8cff3772ba30a6f2607f6239c55282c3cd102e7a241477be2f';
@@ -42,23 +44,43 @@ function Startsida() {
         }
     }; 
 
+
     //Funktion som sätter koordinaterna till dem inskickade
-    const setCoordinates = (chosenLng, chosenLat) => {
-        setLat(chosenLat)
-        setLng(chosenLng)
-        setZoom(15)
-
-
-        console.log('koordinaten är satt')
-        console.log(lng)
-        console.log(lat)
+    const setCoordinates = (lng, lat) => {
+        //setTimeout(() => {
+            setLat(lat)
+            setLng(lng)
+            setZoom(15)
+            console.log('koordinaten är satt')
+        //}, 1000)
     }
+
+        //useEffect som updaterar kartan med dem nya koordinaterna
+        useEffect(() => {
+            if(!map.current || !lng || !lat)
+                return;
+                
+                const updateMap = () => {
+                    coordinatesArray.map((coordinate) => {
+                        const marker = new mapboxgl.Marker({ color: 'green'})
+                        .setLngLat([coordinate[0], coordinate[1]])
+                        .addTo(map.current);
+                        console.log("Marker är satt");
+
+                        map.current.flyTo({center: [coordinate[0], coordinate[1]], zoom});
+                    })
+
+                   
+                }
+                
+                updateMap();
+    
+        }, [coordinatesArray,zoom])
 
     //useEffect som visar resultat från fetch från Open API Umeå
     useEffect(() => {
         showData();
     }, []);
-
 
     //useEffect som initialiserar kartan med default koordinater
     useEffect(() => {
@@ -73,32 +95,11 @@ function Startsida() {
         });
     });
 
-    //useEffect som updaterar kartan med dem nya koordinaterna
-    useEffect(() => {
-        if(!map.current || !lng || !lat)
-            return;
-            
-            const updateMap = () => {
-                map.current.flyTo({center: [lng, lat], zoom});
-                const marker = new mapboxgl.Marker({ color: 'green'})
-                .setLngLat([lng, lat])
-                .addTo(map.current);
-                console.log("Marker är satt");
-            }
-            
-            updateMap();
-
-    }, [lng, lat, zoom])
-    
+    console.log(lng)
+    console.log(lat)
    
     console.log('Data:');
     console.log(data)
-
-
-    console.log('lat:')
-    console.log(lat)
-    console.log('lng:')
-    console.log(lng)
 
     return(
         <div>
@@ -132,13 +133,7 @@ function Startsida() {
                             <td>
                                 <a href = "#"
                                 onClick={() => {
-                                    record.record.fields.geo_shape.geometry.coordinates.map(
-                                        (coordinate, i) => {
-                                            setTimeout(() => {
-                                                setCoordinates(coordinate[0], coordinate[1]);
-                                            }, 3000);
-                                        }
-                                );
+                                    setCoordinatesArray(record.record.fields.geo_shape.geometry.coordinates)
                                 }}
                                 >Välj</a>
                             </td>        
