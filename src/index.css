@@ -28,13 +28,32 @@ code {
 
 .overlay {
   position: fixed;
-  top: 15vh;
+  top: 10vh;
   left: 5vw;
-  width: 30vw;
-  height: 70vh;
+  width: 25vw;
+  height: 60vh;
+
   background-color: rgb(240, 240, 240);
+  border:1px solid #ccc;
+  border-radius: 15px;
+  font:16px/26px Avenir;
+
+  overflow-y:scroll;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  /*justify-content: left;*/
+  /*align-items: center;*/
+  padding: 3vw;
   z-index: 999; /* Set a high z-index to ensure it overlays other contents */
+}
+
+.gap {
+  padding-left: 150px;;
+}
+
+table {
+
+}
+
+h4 {
+  text-align: left;
 }

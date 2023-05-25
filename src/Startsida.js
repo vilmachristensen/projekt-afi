@@ -20,7 +20,7 @@ function Startsida() {
     // Fetch till open data umeå
     const showData = async () => {
         try {
-            const response = await fetch('https://opendata.umea.se/api/v2/catalog/datasets/vandringsleder/records?limit=8', { 
+            const response = await fetch('https://opendata.umea.se/api/v2/catalog/datasets/vandringsleder/records?limit=94', { 
                 headers: {
                     'Authorization': 'Apikey ' + apiKey,
                     'Content-Type': 'application/json',
@@ -91,10 +91,10 @@ function Startsida() {
     return(
         <div>
             <div className="overlay">
-                <table className='table table-striped'>
+                <table className='table table-striped' >
                     <thead>
                         <tr>
-                            <th>Namn</th>
+                            <th><h4>Namn</h4></th>
                             {/*<th>Delsträcka</th>
                             <th>Kommun</th>
                             <th>Klass</th>
@@ -102,7 +102,8 @@ function Startsida() {
                             <th>Datum</th>
                             <th>Lon</th>
                             <th>Lat</th>*/}
-                            <th>Välj</th>
+      
+                            <th className='gap'>Välj</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -110,7 +111,7 @@ function Startsida() {
                         <> {/* JSX kan också använda div */}
                         {data.records.map((record) =>
                             <tr key={record.record.id}>
-                                <td>{record.record.fields.namn}</td>
+                                <td>{record.record.fields.namn} <br></br></td>
                                 {/*<td>{record.record.fields.delstracka}</td>
                                 <td>{record.record.fields.kommun}</td>
                                 <td>{record.record.fields.klass}</td>
@@ -118,12 +119,13 @@ function Startsida() {
                                 <td>{record.record.fields.datum}</td>
                                 <td>{record.record.fields.geo_point_2d.lon}</td>
                                 <td>{record.record.fields.geo_point_2d.lat}</td>*/}
-                                <td>
+                            
+                                <td className='gap'>
                                     <a href = "#"
                                     onClick={() => {
                                         setCoordinatesArray(record.record.fields.geo_shape.geometry.coordinates)
                                     }}
-                                    >Välj</a>
+                                    >Välj</a><br></br>
                                 </td>        
                             </tr>
                         )}
