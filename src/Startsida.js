@@ -36,8 +36,6 @@ function Startsida() {
             console.log(result);
 
             setData(result);
-
-
         }
         catch (error) {
             console.error(error);
@@ -62,7 +60,9 @@ function Startsida() {
                 
                 const updateMap = () => {
                     coordinatesArray.map((coordinate) => {
-                        const marker = new mapboxgl.Marker({ color: 'green'})
+                        const el = document.createElement('div');
+                        el.className = 'marker';
+                        const marker = new mapboxgl.Marker(el)
                         .setLngLat([coordinate[0], coordinate[1]])
                         .addTo(map.current);
                         console.log("Marker är satt");
