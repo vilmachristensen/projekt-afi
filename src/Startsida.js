@@ -7,9 +7,9 @@ function Startsida() {
     mapboxgl.accessToken = 'pk.eyJ1IjoibGlubmVhbmlsc3NvbjAwIiwiYSI6ImNsaDh1NGlsazAxM3Mza3FmY3c4eG15ZDUifQ.5_Re7kERjjj5yg7rjtEBqQ';
     const mapContainer = useRef(null);
     const map = useRef(null);
-    const [lng, setLng] = useState(20.26);
-    const [lat, setLat] = useState(63.83);
-    const [zoom, setZoom] = useState(15);
+    const lng = 20.26;
+    const lat = 63.83;
+    const zoom = 15;
 
     const [coordinatesArray, setCoordinatesArray] = useState([]);
 
@@ -20,7 +20,7 @@ function Startsida() {
     // Fetch till open data umeå
     const showData = async () => {
         try {
-            const response = await fetch('https://opendata.umea.se/api/v2/catalog/datasets/vandringsleder/records?limit=80', { 
+            const response = await fetch('https://opendata.umea.se/api/v2/catalog/datasets/vandringsleder/records?limit=8', { 
                 headers: {
                     'Authorization': 'Apikey ' + apiKey,
                     'Content-Type': 'application/json',
@@ -42,17 +42,6 @@ function Startsida() {
         }
     }; 
 
-
-    //Funktion som sätter koordinaterna till dem inskickade
-    const setCoordinates = (lng, lat) => {
-        //setTimeout(() => {
-            setLat(lat)
-            setLng(lng)
-            setZoom(15)
-            console.log('koordinaten är satt')
-        //}, 1000)
-    }
-
         //useEffect som updaterar kartan med dem nya koordinaterna
         useEffect(() => {
             if(!map.current || !lng || !lat)
@@ -68,14 +57,12 @@ function Startsida() {
                         console.log("Marker är satt");
 
                         map.current.flyTo({center: [coordinate[0], coordinate[1]], zoom});
-                    })
-
-                   
+                    })   
                 }
                 
                 updateMap();
     
-        }, [coordinatesArray,zoom])
+        }, [coordinatesArray, zoom])
 
     //useEffect som visar resultat från fetch från Open API Umeå
     useEffect(() => {
@@ -103,58 +90,60 @@ function Startsida() {
 
     return(
         <div>
-            <table className='table table-striped'>
-                <thead>
-                    <tr>
-                        <th>Namn</th>
-                        <th>Delsträcka</th>
-                        <th>Kommun</th>
-                        <th>Klass</th>
-                        <th>Längd</th>
-                        <th>Datum</th>
-                        <th>Lon</th>
-                        <th>Lat</th>
-                        <th>Välj</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {data.records ?
-                    <> {/* JSX kan också använda div */}
-                    {data.records.map((record) =>
-                        <tr key={record.record.id}>
-                            <td>{record.record.fields.namn}</td>
-                            <td>{record.record.fields.delstracka}</td>
-                            <td>{record.record.fields.kommun}</td>
-                            <td>{record.record.fields.klass}</td>
-                            <td>{record.record.fields.langd}</td>
-                            <td>{record.record.fields.datum}</td>
-                            <td>{record.record.fields.geo_point_2d.lon}</td>
-                            <td>{record.record.fields.geo_point_2d.lat}</td>
-                            <td>
-                                <a href = "#"
-                                onClick={() => {
-                                    setCoordinatesArray(record.record.fields.geo_shape.geometry.coordinates)
-                                }}
-                                >Välj</a>
-                            </td>        
+            <div className="overlay">
+                <table className='table table-striped'>
+                    <thead>
+                        <tr>
+                            <th>Namn</th>
+                            {/*<th>Delsträcka</th>
+                            <th>Kommun</th>
+                            <th>Klass</th>
+                            <th>Längd</th>
+                            <th>Datum</th>
+                            <th>Lon</th>
+                            <th>Lat</th>*/}
+                            <th>Välj</th>
                         </tr>
-                    )}
-                    </> 
-                    :
-                    <tr>
-                        <td>{'-'}</td>
-                        <td>{'-'}</td>
-                        <td>{'-'}</td>
-                        <td>{'-'}</td>
-                        <td>{'-'}</td>
-                        <td>{'-'}</td>
-                        <td>{'-'}</td>
-                        <td>{'-'}</td>
-                        <td>{'-'}</td>
-                    </tr>
-                }
-                </tbody>
-            </table> 
+                    </thead>
+                    <tbody>
+                    {data.records ?
+                        <> {/* JSX kan också använda div */}
+                        {data.records.map((record) =>
+                            <tr key={record.record.id}>
+                                <td>{record.record.fields.namn}</td>
+                                {/*<td>{record.record.fields.delstracka}</td>
+                                <td>{record.record.fields.kommun}</td>
+                                <td>{record.record.fields.klass}</td>
+                                <td>{record.record.fields.langd}</td>
+                                <td>{record.record.fields.datum}</td>
+                                <td>{record.record.fields.geo_point_2d.lon}</td>
+                                <td>{record.record.fields.geo_point_2d.lat}</td>*/}
+                                <td>
+                                    <a href = "#"
+                                    onClick={() => {
+                                        setCoordinatesArray(record.record.fields.geo_shape.geometry.coordinates)
+                                    }}
+                                    >Välj</a>
+                                </td>        
+                            </tr>
+                        )}
+                        </> 
+                        :
+                        <tr>
+                            <td>{'-'}</td>
+                            <td>{'-'}</td>
+                            {/*<td>{'-'}</td>
+                            <td>{'-'}</td>
+                            <td>{'-'}</td>
+                            <td>{'-'}</td>
+                            <td>{'-'}</td>
+                            <td>{'-'}</td>
+                            <td>{'-'}</td>*/}
+                        </tr>
+                    }
+                    </tbody>
+                </table> 
+            </div>
             <div>
                 <div ref={mapContainer} className="map-container" />
             </div>
@@ -163,15 +152,3 @@ function Startsida() {
 }
 
 export default Startsida;
-
-
-//  <td><a href ="#" onClick={() => setCoordinates(record.record.fields.geo_point_2d.lon, record.record.fields.geo_point_2d.lat)}>Välj</a></td>
-
-
-// {data.records.record.fields.geo_shape.coordinates.map((coordinate) =>
-// <td><a href ="#" onClick={() => setCoordinates(coordinate[i], coordinate[i+1])}>Välj</a></td>
-//)}
-
-// {record.record.fields.geo_shape.geometry.coordinates.map((coordinate, i) => 
-//<td key={i}><a href ="#" onClick={() => setCoordinates(coordinate[0], coordinate[1])}>Välj</a></td>
-//)} 
