@@ -91,10 +91,15 @@ function Startsida() {
     return(
         <div>
             <div className="overlay">
+                <div className='header'>
+                    <div className = 'logo'>
+                        <img src="logo.png" alt='Umeå Stigen' width="130px"></img>
+                    </div>
+                </div>
                 <table className='table table-striped' >
                     <thead>
                         <tr>
-                            <th><h4>Namn</h4></th>
+                            <th><h4>   </h4></th>
                             {/*<th>Delsträcka</th>
                             <th>Kommun</th>
                             <th>Klass</th>
@@ -103,7 +108,7 @@ function Startsida() {
                             <th>Lon</th>
                             <th>Lat</th>*/}
       
-                            <th className='gap'>Välj</th>
+                            <th className='gap'>   </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -121,11 +126,11 @@ function Startsida() {
                                 <td>{record.record.fields.geo_point_2d.lat}</td>*/}
                             
                                 <td className='gap'>
-                                    <a href = "#"
+                                    <button
                                     onClick={() => {
                                         setCoordinatesArray(record.record.fields.geo_shape.geometry.coordinates)
                                     }}
-                                    >Välj</a><br></br>
+                                    >Välj</button><br></br>
                                 </td>        
                             </tr>
                         )}
