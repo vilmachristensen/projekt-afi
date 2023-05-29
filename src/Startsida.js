@@ -98,31 +98,15 @@ function Startsida() {
                     <thead>
                         <tr>
                             <th><h4>   </h4></th>
-                            {/*<th>Delsträcka</th>
-                            <th>Kommun</th>
-                            <th>Klass</th>
-                            <th>Längd</th>
-                            <th>Datum</th>
-                            <th>Lon</th>
-                            <th>Lat</th>*/}
-    
                             <th className='gap'>   </th>
                         </tr>
                     </thead>
                     <tbody>
                     {data.records ?
-                        <> {/* JSX kan också använda div */}
+                        <>
                         {data.records.map((record) =>
                             <tr key={record.record.id}>
                                 <td>{record.record.fields.namn} <br></br></td>
-                                {/*<td>{record.record.fields.delstracka}</td>
-                                <td>{record.record.fields.kommun}</td>
-                                <td>{record.record.fields.klass}</td>
-                                <td>{record.record.fields.langd}</td>
-                                <td>{record.record.fields.datum}</td>
-                                <td>{record.record.fields.geo_point_2d.lon}</td>
-                                <td>{record.record.fields.geo_point_2d.lat}</td>*/}
-                            
                                 <td className='gap'>
                                     <button
                                     onClick={() => {
@@ -137,13 +121,6 @@ function Startsida() {
                         <tr>
                             <td>{'-'}</td>
                             <td>{'-'}</td>
-                            {/*<td>{'-'}</td>
-                            <td>{'-'}</td>
-                            <td>{'-'}</td>
-                            <td>{'-'}</td>
-                            <td>{'-'}</td>
-                            <td>{'-'}</td>
-                            <td>{'-'}</td>*/}
                         </tr>
                     }
                     </tbody>
