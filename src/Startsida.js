@@ -9,7 +9,7 @@ function Startsida() {
     const map = useRef(null);
     const lng = 20.26;
     const lat = 63.83;
-    const zoom = 15;
+    const zoom = 14;
 
     const [coordinatesArray, setCoordinatesArray] = useState([]);
 
@@ -90,11 +90,9 @@ function Startsida() {
 
     return(
         <div>
-            <div className="overlay">
-                <div className='header'>
-                    <div className = 'logo'>
-                        <img src="logo.png" alt='Umeå Stigen' width="130px"></img>
-                    </div>
+            <div className='overlay'>
+                <div className = 'overlay-header'>
+                    <img src="logo.png" alt="Umeå Stigen" width="170px"></img>
                 </div>
                 <table className='table table-striped' >
                     <thead>
@@ -107,7 +105,7 @@ function Startsida() {
                             <th>Datum</th>
                             <th>Lon</th>
                             <th>Lat</th>*/}
-      
+    
                             <th className='gap'>   </th>
                         </tr>
                     </thead>
